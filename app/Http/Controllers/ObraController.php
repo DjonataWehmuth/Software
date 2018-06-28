@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Pessoa;
-
+use App\Obra;
 use App\Campo;
 use App\Tabela;
 use App\Botao;
@@ -11,9 +10,9 @@ use Validator;
 
 use Illuminate\Http\Request;
 
-class PessoaController extends Controller
+class ObraController extends Controller
 {
-    const TABELA = 1;
+    const TABELA = 2;
     /**
      * Display a listing of the resource.
      *
@@ -21,10 +20,10 @@ class PessoaController extends Controller
      */
     public function index()
     {
-      $tabela = Tabela::find(self::TABELA);
-      $campos = Campo::where('tabela_id', self::TABELA)->orderBy('ordem', 'asc')->get();
-      $dados  = Pessoa::all();
-      return view('tecnologia.index')->with(compact('tabela','tabela', 'campos', 'campos', 'dados', 'dados'));
+        $tabela = Tabela::find(self::TABELA);
+        $campos = Campo::where('tabela_id', self::TABELA)->orderBy('ordem', 'asc')->get();
+        $dados  = Obra::all();
+        return view('tecnologia.index')->with(compact('tabela','tabela', 'campos', 'campos', 'dados', 'dados'));
     }
 
     /**
@@ -34,9 +33,9 @@ class PessoaController extends Controller
      */
     public function create()
     {
-      $tabela = Tabela::find(self::TABELA);
-      $campos = Campo::where('tabela_id', self::TABELA)->orderBy('ordem', 'asc')->get();
-      return view('tecnologia.novo')->with(compact('tabela','tabela', 'campos', 'campos'));
+        $tabela = Tabela::find(self::TABELA);
+        $campos = Campo::where('tabela_id', self::TABELA)->orderBy('ordem', 'asc')->get();
+        return view('tecnologia.novo')->with(compact('tabela','tabela', 'campos', 'campos'));
     }
 
     /**
@@ -48,8 +47,9 @@ class PessoaController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nome' => 'required|unique:cad_pessoas|max:255',
-            'email' => 'required|unique:cad_pessoas|max:255',
+            'nome' => 'required',
+            'pessoa_id' => 'required',
+            'tipo_id' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -59,25 +59,25 @@ class PessoaController extends Controller
                         ->withInput();
         }
         $dados = $request->all();
-        $pessoa = Pessoa::create($dados);
+        $obra = Obra::create($dados);
 
-        return redirect()->route('consultar_pessoa', ['id' => $pessoa->id]);
+        return redirect()->route('consultar_obra', ['id' => $obra->id]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Pessoa  $pessoa
+     * @param  \App\Obra  $obra
      * @return \Illuminate\Http\Response
      */
-    public function show(int $pessoa)
+    public function show(int $obra)
     {
-        $registro = Pessoa::find($pessoa);
+        $registro = Obra::find($obra);
         $tabela   = Tabela::find(self::TABELA);
         $campos   = Campo::where('tabela_id', self::TABELA)->orderBy('ordem', 'asc')->get();
         $botoes   = Botao::where('tabela_id', self::TABELA)->get();
 
-        if (in_array($registro->status_id, [2, 5]))
+        if (in_array($registro->status_id, [6, 7,8]))
             $somenteleitura = 'disabled';
         else
             $somenteleitura = '';
@@ -88,10 +88,10 @@ class PessoaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Pessoa  $pessoa
+     * @param  \App\Obra  $obra
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pessoa $pessoa)
+    public function edit(Obra $obra)
     {
         //
     }
@@ -100,28 +100,28 @@ class PessoaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pessoa  $pessoa
+     * @param  \App\Obra  $obra
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pessoa $pessoa)
+    public function update(Request $request, Obra $obra)
     {
         $dados = $request->all();
-        $registro = Pessoa::find($dados['id']);
+        $registro = Obra::find($dados['id']);
 
         $registro->fill($dados);
 
         $registro->save();
 
-        return redirect()->route('consultar_pessoa', ['id' => $registro->id]);
+        return redirect()->route('consultar_obra', ['id' => $registro->id]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Pessoa  $pessoa
+     * @param  \App\Obra  $obra
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pessoa $pessoa)
+    public function destroy(Obra $obra)
     {
         //
     }
@@ -130,19 +130,23 @@ class PessoaController extends Controller
     {
         $dados = $request->all();
 
-        $registro = Pessoa::find($dados['id']);
+        $registro = Obra::find($dados['id']);
 
         if ($dados['acao'] === 'Ativar')
-            $status = 2;
+            $status = 6;
         else if ($dados['acao'] === 'Editar')
             $status = 3;
         else if ($dados['acao'] === 'Cancelar')            
             $status = 5;
+        else if ($dados['acao'] === 'Executar')            
+            $status = 7;
+        else if ($dados['acao'] === 'Finalizar')            
+            $status = 8;
 
         $registro->status_id = $status;
 
         $registro->save();
 
-        return redirect()->route('consultar_pessoa', ['id' => $registro->id]);
+        return redirect()->route('consultar_obra', ['id' => $registro->id]);
     }
 }

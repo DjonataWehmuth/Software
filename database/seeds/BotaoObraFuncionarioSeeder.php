@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CampoSeeder extends Seeder
+class BotaoObraFuncionarioSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class CampoSeeder extends Seeder
      */
     public function run()
     {
-
+        //
     }
 }

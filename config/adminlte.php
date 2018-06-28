@@ -166,8 +166,8 @@ return [
           'icon' => 'table',
         ],
         [
-          'text' => 'Operação',
-          'url'  => '#',
+          'text' => 'Tipos',
+          'url'  => '/cadastros/tipos',
           'icon' => 'table',
         ],
 
@@ -253,7 +253,7 @@ return [
       'submenu' => [
         [
           'text' => 'Obras',
-          'url'  => '#',
+          'url'  => '/projetos/obras',
           'icon' => 'th',
         ],
         [

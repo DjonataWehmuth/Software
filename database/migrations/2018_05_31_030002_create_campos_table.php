@@ -18,11 +18,13 @@ class CreateCamposTable extends Migration
             $table->string('nome');
             $table->string('titulo')->nullable();
             $table->string('descricao')->nullable();
+            $table->string('somenteleitura')->nullable();
 
             $table->string('tamanho')->nullable();
             $table->string('tamanhof')->nullable();
             $table->string('tamanhoi')->nullable();
 
+            $table->integer('ordem');
             $table->string('componente');
             $table->string('tipo')->nullable();
             $table->string('mascara')->nullable();

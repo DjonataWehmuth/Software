@@ -32,7 +32,7 @@
   </tbody>
 </table>
 
-<a type="button" href="{{route($tabela->formularionovo)}}" class="btn btn-primary"><i class="fa fa-plus-square"></i></a>
+<a type="button" href="{{route($tabela->formularionovo)}}" class="btn btn-app btn-primary"><i class="fa fa-plus-square"></i>Incluir</a>
 
 @stop
 @section('js')

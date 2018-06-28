@@ -34,6 +34,7 @@
                         @if ($campo->mascara != '')
                           data-mask="{{$campo->mascara}}" 
                         @endif
+                        {{$campo->somenteleitura}}
                         value="{{ old($campo->nome) }}""
                         name="{{$campo->nome}}" type="{{$campo->tipo}}" class="form-control" onkeyup="maiuscula(this)" maxlength="{{$campo->caracteres}}" placeholder="{{$campo->descricao}}" {{$campo->obrigatorio}}>
                 </div>
@@ -65,9 +66,11 @@
       </form>
     </div>
     <div class="box-footer">
-      <a href="#" class="btn btn-primary">Cancelar</a>
-      <button form="cadastro" type="reset" class="btn btn-primary">Limpar</button>
-      <button form="cadastro" type="submit" class="btn btn-primary">Gravar</button>
+      <div class="btn-group">
+        <a href="#" class="btn btn-app btn-primary"><i class="fa fa-ban"></i>Cancelar</a>
+        <button form="cadastro" type="reset" class="btn btn-app btn-primary"><i class="fa fa-eraser"></i>Limpar</button>
+        <button form="cadastro" type="submit" class="btn btn-app btn-primary"><i class="fa fa-save"></i>Gravar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -101,6 +104,13 @@
                     var data = obj.data;
                     var selectbox = $('#'+campo);
                     selectbox.find('option').remove();
+                    
+                    $(selectbox)
+                        .append($("<option></option>")
+                        .attr("value",0)
+                        .attr("disabled",'true')
+                        .attr("selected",'true')
+                        .text('Selecione'));
 
                     $.each(obj, function(key, value) {   
                       $(selectbox)

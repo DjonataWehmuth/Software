@@ -40,5 +40,23 @@ class StatusSeeder extends Seeder
         'nome' => 'Cancelado',
         'cor' => 'danger',
       ]);
+
+      DB::table('cad_status')->insert([
+        'id'   => 6,
+        'nome' => 'Ag. execução',
+        'cor' => 'primary',
+      ]);
+
+      DB::table('cad_status')->insert([
+        'id'   => 7,
+        'nome' => 'Executando',
+        'cor' => 'success',
+      ]);
+
+      DB::table('cad_status')->insert([
+        'id'   => 8,
+        'nome' => 'Encerrada',
+        'cor' => 'info',
+      ]);
     }
 }

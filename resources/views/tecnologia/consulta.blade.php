@@ -27,6 +27,7 @@
                           data-mask="{{$campo->mascara}}" 
                         @endif
                         {{ $somenteleitura }}
+                        {{$campo->somenteleitura}}
                         name="{{$campo->nome}}" type="{{$campo->tipo}}" class="form-control" onkeyup="maiuscula(this)" maxlength="{{$campo->caracteres}}" placeholder="{{$campo->descricao}}" value="{{$registro{$campo->nome} }}" {{$campo->obrigatorio}}>
                 </div>
               </div>
@@ -49,7 +50,7 @@
                   <div class="input-group-addon">
                     <i class="fa fa-{{$campo->icone}}"></i>
                  </div>
-                 <textarea {{ $somenteleitura }} name="{{$campo->nome}}" rows="{{$campo->tamanho}}" class="form-control" onkeyup="maiuscula(this)" placeholder="{{$campo->descricao}}" {{$campo->obrigatorio}}>{{$registro{$campo->nome} }}</textarea>
+                 <textarea {{ $somenteleitura }} {{$campo->somenteleitura}} name="{{$campo->nome}}" rows="{{$campo->tamanho}}" class="form-control" onkeyup="maiuscula(this)" placeholder="{{$campo->descricao}}" {{$campo->obrigatorio}}>{{$registro{$campo->nome} }}</textarea>
                 </div>
               </div>
             @endif
@@ -59,23 +60,22 @@
     <div class="box-footer">
 
     <div class="btn-group">
-      <a href="#" class="btn btn-primary"><i class="fa fa-step-backward"></i> Voltar</a>
+      <a href="#" class="btn btn-app btn-primary"><i class="fa fa-step-backward"></i> Voltar</a>
 
         @foreach($botoes as $botao)
-          @if(in_array($registro->status_id, explode(',' ,$botao->situacao )))
-            
-            @if($botao->acao === '')
-              <button form="cadastro" type="{{$botao->tipo}}" class="btn btn-{{$botao->cor}}"><i class="fa fa-{{$botao->icone}}"></i> {{$botao->nome}}</button>
-            
-            @else
+          @if(in_array($registro->status_id, explode(',' ,$botao->situacao )))            
+            @if($botao->tipo === 'submit')
+              <button form="cadastro" type="{{$botao->tipo}}" class="btn btn-app btn-{{$botao->cor}}"><i class="fa fa-{{$botao->icone}}"></i> {{$botao->nome}}</button>
+            @elseif($botao->tipo === 'acao')
               <form hidden method="POST" action="{{route($botao->url)}}" id="form{{$botao->nome}}">
                 {{ csrf_field() }}
                 <input hidden name='acao' value='{{$botao->acao}}'>
                 <input hidden name='id' value='{{$registro->id}}'>
               </form>
-              <button form="form{{$botao->nome}}" type="{{$botao->tipo}}" class="btn btn-{{$botao->cor}}"><i class="fa fa-{{$botao->icone}}"></i> {{$botao->nome}}</button>
+              <button form="form{{$botao->nome}}" type="{{$botao->tipo}}" class="btn btn-app btn-{{$botao->cor}}"><i class="fa fa-{{$botao->icone}}"></i> {{$botao->nome}}</button>
+            @elseif($botao->tipo === 'link')
+              <a href="{{$botao->url}}" class="btn btn-app btn-{{$botao->cor}}"><i class="fa fa-{{$botao->icone}}"></i> {{$botao->nome}}</a>
             @endif
-
           @endif
         @endforeach
 
